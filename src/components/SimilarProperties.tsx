@@ -67,7 +67,7 @@ export default function SimilarProperties({ properties }: { properties: Property
       <ul
         ref={track}
         onScroll={update}
-        className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6 scroll-px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {properties.map((p) => (
           <li key={p.id} className="snap-start shrink-0 w-[82%] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
