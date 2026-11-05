@@ -65,13 +65,15 @@ function toHomeProperty(p: Property): HomeProperty {
 /**
  * Homepage data, loaded on the server so the links to each property page are in the
  * HTML that reaches the browser (no client-side database request needed).
- * Hero: featured properties (newest first, max MAX_FEATURED); if none are featured, the newest ones.
+ * Hero: MAX_FEATURED slides — the featured properties (newest first), then the newest others to fill the gaps.
  */
 export async function loadHomeData(): Promise<{ properties: HomeProperty[]; slides: HeroSlide[] }> {
   try {
     const active = await getActiveProperties();
     const featured = active.filter((p) => p.featured);
-    const hero = (featured.length ? featured : active).slice(0, MAX_FEATURED);
+    // Always 5 slides: the featured listings first, topped up with the newest others if fewer are featured.
+    const others = active.filter((p) => !p.featured);
+    const hero = [...featured.slice(0, MAX_FEATURED), ...others].slice(0, MAX_FEATURED);
     return { properties: active.map(toHomeProperty), slides: hero.map(toSlide) };
   } catch {
     return { properties: [], slides: [] }; // the page falls back to its built-in samples
