@@ -32,7 +32,7 @@ export default async function PropertiesPage({ searchParams }: Props) {
       <main className="pt-28 pb-32 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-10">
           <h1 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Propiedades</h1>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">Todas las propiedades</p>
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">Todas las propiedades</p>
         </div>
         <PropertiesList
           properties={all}

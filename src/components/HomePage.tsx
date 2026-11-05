@@ -248,17 +248,17 @@ export default function CoastalWebHome({
                   <span aria-hidden="true" className="text-white/40">·</span>
                   <span className="text-white">{slide.price}</span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-semibold tracking-tight mb-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
                   {slide.title}
                 </h1>
-                <p className="text-lg md:text-xl text-white/90 font-light">
+                <p className="text-base sm:text-lg lg:text-xl text-white/90 font-light">
                   {slide.tagline}
                 </p>
               </div>
-              <div className="hidden md:block md:pr-16">
+              <div className="w-full md:w-auto md:pr-16">
                 <a
                   href="#contact"
-                  className="inline-flex items-center space-x-2 bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:bg-white/90 transition-all"
+                  className="flex md:inline-flex w-full md:w-auto justify-center items-center space-x-2 bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:bg-white/90 transition-all"
                 >
                   <span>Solicitar información</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -303,7 +303,7 @@ export default function CoastalWebHome({
           <div className="flex flex-col justify-between gap-8">
             <div className="space-y-4">
               <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Vivir en Punta del Este</h2>
-              <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
                 Casas de autor, elegidas con criterio.
               </p>
             </div>
@@ -336,7 +336,7 @@ export default function CoastalWebHome({
       <section id="areas" className="pt-24 md:pt-32 pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
           <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Zonas en las que trabajamos</h2>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
             Seis zonas exclusivas de la costa, conocidas a fondo.
           </p>
         </div>
@@ -420,7 +420,7 @@ export default function CoastalWebHome({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="space-y-6">
             <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Quiénes somos</h2>
-            <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
               Una inmobiliaria boutique dedicada a Punta del Este.
             </p>
             <p className="text-[#515154] font-light leading-relaxed">
@@ -454,7 +454,7 @@ export default function CoastalWebHome({
       <section id="services" className="pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
           <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Nuestros servicios</h2>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
             Todo lo que necesita, resuelto con cuidado.
           </p>
         </div>
@@ -478,7 +478,7 @@ export default function CoastalWebHome({
       <section id="team" className="pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
           <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Nuestro equipo</h2>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">
             Las personas detrás de cada residencia.
           </p>
         </div>
@@ -520,7 +520,7 @@ export default function CoastalWebHome({
           {/* Left Column: Company Data & Value Prop */}
           <div>
             <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Adquisición privada</h2>
-            <p className="text-3xl md:text-5xl font-semibold tracking-tight mb-6">
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-6">
               Comience su camino hacia una vida excepcional junto al mar.
             </p>
             <p className="text-[#515154] font-light leading-relaxed mb-12">

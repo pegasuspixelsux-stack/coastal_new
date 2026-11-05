@@ -31,13 +31,13 @@ export default function PropertySpecs({
             <span>{place || p.location.country}</span>
             {p.location.state && <span className="text-[#86868B]">· {p.location.state}</span>}
           </p>
-          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">{p.title}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">{p.title}</h1>
         </div>
         <div className="bg-[#1D1D1F] text-white rounded-2xl px-6 py-4 shrink-0">
           <p className="text-xs uppercase tracking-widest text-white/60 font-semibold mb-1">
             {p.operation === 'sale' ? 'Precio' : p.operation === 'rent' ? 'Alquiler / mes' : 'Tarifa de temporada'}
           </p>
-          <p className="text-2xl md:text-3xl font-semibold tracking-tight">
+          <p className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight">
             {formatPriceWithCode(p.price, p.currency)}
           </p>
         </div>

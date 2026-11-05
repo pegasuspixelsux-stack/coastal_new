@@ -39,7 +39,7 @@ export default function RecommendedProperties({ properties }: { properties: Home
       <div className="flex items-end justify-between gap-4 mb-10">
         <div>
           <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">También le puede interesar</h2>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">Propiedades similares</p>
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">Propiedades similares</p>
         </div>
         <div className="hidden sm:flex items-center gap-3">
           <button

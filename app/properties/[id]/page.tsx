@@ -80,7 +80,7 @@ export default async function PropertyPage({ params }: Props) {
           <span aria-hidden="true" className="text-white/40">·</span>
           <span className="text-white">{formatPriceWithCode(property.price, property.currency)}</span>
         </p>
-        <h1 className="text-4xl md:text-6xl font-semibold tracking-tight max-w-3xl">{property.title}</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight max-w-3xl">{property.title}</h1>
       </PropertyGallery>
 
       <main className="max-w-7xl mx-auto px-6 py-16 md:py-24">
