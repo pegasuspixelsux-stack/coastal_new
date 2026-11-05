@@ -360,8 +360,8 @@ export default function CoastalWebHome({
       </header>
 
       {/* --- ZONES STRIP (transparent, horizontally scrolling) --- */}
-      <div className="fixed top-16 left-0 right-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 flex gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="fixed top-16 left-0 right-0 z-40 bg-black/20 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 flex gap-6 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {zones.map((zone) => (
             <button
               key={zone.name}
@@ -370,7 +370,7 @@ export default function CoastalWebHome({
                 setQuery(zone.search);
                 document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="shrink-0 whitespace-nowrap text-xs font-medium text-white bg-black/20 hover:bg-white hover:text-black backdrop-blur-md border border-white/30 px-4 py-1.5 rounded-full transition-colors"
+              className="shrink-0 whitespace-nowrap text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
               {zone.name}
             </button>
