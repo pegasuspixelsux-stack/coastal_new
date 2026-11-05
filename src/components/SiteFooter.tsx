@@ -5,7 +5,7 @@ const linkClass = 'hover:text-white transition-colors';
 /** The four-column site footer, shared by the homepage and the property pages. */
 export default function SiteFooter() {
   return (
-    <footer className="bg-[#1D1D1F] text-[#FBFBFD] py-32 px-6">
+    <footer className="bg-black text-[#FBFBFD] py-32 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         {/* Column 1: Brand */}
         <div className="space-y-4">
@@ -47,6 +47,13 @@ export default function SiteFooter() {
             <li><Link href="/admin/login" className={linkClass}>Administración</Link></li>
           </ul>
         </div>
+      </div>
+
+      {/* Wordmark */}
+      <div className="max-w-7xl mx-auto mb-16 select-none" aria-hidden="true">
+        <p className="text-[22vw] md:text-[18vw] lg:text-[14rem] leading-none font-semibold tracking-tighter text-white/25 text-center">
+          Coastal
+        </p>
       </div>
 
       {/* Bottom Bar */}

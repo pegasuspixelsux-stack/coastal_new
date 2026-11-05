@@ -8,8 +8,8 @@ import PropertyImage from '@/src/components/PropertyImage';
 const parsePrice = (price: string) => Number(price.replace(/[^0-9]/g, ''));
 const priceOptions = [8_000_000, 10_000_000, 12_000_000, 15_000_000];
 
-/** Full inventory: search, filters and the property grid. */
-export default function PropertiesInventory({
+/** Properties page body: search, filters and the property grid. */
+export default function PropertiesList({
   properties,
   initialQuery = '',
   initialFiltersOpen = false,
