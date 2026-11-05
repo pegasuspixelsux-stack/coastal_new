@@ -28,6 +28,8 @@ export default function LocalizePage() {
           title: rep.title,
           description: rep.description,
           location: rep.location,
+          // Only the single imported sample photo is replaced; real uploaded galleries are kept.
+          ...(property.photos.length <= 1 ? { photos: rep.photos } : {}),
         });
       }
       setDone(matches.length);
@@ -44,7 +46,7 @@ export default function LocalizePage() {
       <PageHeader
         eyebrow="Herramientas"
         title="Convertir a Punta del Este"
-        description="Reemplaza títulos, descripciones y ubicaciones de las propiedades de ejemplo en inglés. No cambia precios, fotos ni medidas."
+        description="Reemplaza títulos, descripciones y ubicaciones de las propiedades de ejemplo en inglés y agrega fotos a la galería si solo tienen una. No cambia precios ni medidas."
       />
 
       <div className={`${cardClass} p-6 space-y-5`}>

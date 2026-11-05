@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { FileSpreadsheet, LayoutGrid, Plus, Rows3 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
@@ -14,11 +14,40 @@ import type { Property, PropertyOperation, PropertyStatus, PropertyType } from '
 const selectClass =
   'bg-white border border-[#000000]/5 rounded-full px-4 py-2.5 text-xs outline-none cursor-pointer';
 
+type View = 'grid' | 'table';
+const VIEW_KEY = 'dashboard-properties-view';
+const VIEW_EVENT = 'dashboard-properties-view-change';
+const DEFAULT_VIEW: View = 'table'; // list is the default layout
+
+// The chosen layout is remembered on this device. Storage can be unavailable, so it is optional.
+function getView(): View {
+  try {
+    const saved = localStorage.getItem(VIEW_KEY);
+    return saved === 'grid' || saved === 'table' ? saved : DEFAULT_VIEW;
+  } catch {
+    return DEFAULT_VIEW;
+  }
+}
+function subscribeView(onChange: () => void) {
+  window.addEventListener(VIEW_EVENT, onChange);
+  window.addEventListener('storage', onChange);
+  return () => {
+    window.removeEventListener(VIEW_EVENT, onChange);
+    window.removeEventListener('storage', onChange);
+  };
+}
+function setView(v: View) {
+  try {
+    localStorage.setItem(VIEW_KEY, v);
+  } catch {}
+  window.dispatchEvent(new Event(VIEW_EVENT));
+}
+
 export default function PropertiesPage() {
   const { agent } = useAuth();
   const { items, loading, loadingMore, error, hasMore, loadMore, reload, update, remove } = useProperties();
   const [importing, setImporting] = useState(false);
-  const [view, setView] = useState<'grid' | 'table'>('grid');
+  const view = useSyncExternalStore(subscribeView, getView, () => DEFAULT_VIEW);
   const [operation, setOperation] = useState<PropertyOperation | 'all'>('all');
   const [type, setType] = useState<PropertyType | 'all'>('all');
   const [neighborhood, setNeighborhood] = useState('all');
@@ -147,19 +176,18 @@ export default function PropertiesPage() {
 
         <div className="ml-auto inline-flex rounded-full bg-white border border-[#000000]/5 p-1" role="group" aria-label="View">
           {([
-            ['grid', LayoutGrid, 'Grid view'],
-            ['table', Rows3, 'Table view'],
+            ['grid', LayoutGrid, 'Grid'],
+            ['table', Rows3, 'List'],
           ] as const).map(([key, Icon, label]) => (
             <button
               key={key}
               onClick={() => setView(key)}
-              aria-label={label}
               aria-pressed={view === key}
-              className={`p-2 rounded-full transition-colors ${
+              className={`inline-flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-full transition-colors ${
                 view === key ? 'bg-[#1D1D1F] text-white' : 'text-[#515154] hover:bg-[#F5F5F7]'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-4 h-4" /> {label}
             </button>
           ))}
         </div>
