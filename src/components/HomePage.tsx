@@ -1,22 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { HeroSlide, HomeProperty } from '@/src/lib/homeData';
+import { fallbackProperties, type HeroSlide, type HomeProperty } from '@/src/lib/homeData';
 import SiteFooter from '@/src/components/SiteFooter';
-import PropertyImage from '@/src/components/PropertyImage';
 import {
   ArrowUpRight,
   MapPin,
-  Bed,
-  Bath,
-  Maximize,
   Mail,
   Phone,
   Send,
   Search,
-  SlidersHorizontal,
   Home,
   Key,
   TrendingUp,
@@ -168,103 +164,6 @@ const fallbackSlides: HeroSlide[] = [
   },
 ];
 
-// --- HARDCODED PROPERTIES (Bento Grid) ---
-const fallbackProperties: HomeProperty[] = [
-  {
-    id: 1,
-    title: "The Horizon Villa",
-    location: "Big Sur, CA",
-    price: "$14,500,000",
-    beds: 5,
-    baths: 6,
-    area: "6,200 sqft",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Cliffside Sanctuary",
-    location: "Malibu, CA",
-    price: "$9,800,000",
-    beds: 4,
-    baths: 4.5,
-    area: "4,500 sqft",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    title: "The Glass Pavilion",
-    location: "Carmel, CA",
-    price: "$11,200,000",
-    beds: 3,
-    baths: 3.5,
-    area: "3,900 sqft",
-    image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 4,
-    title: "Ocean Blue Estate",
-    location: "Laguna Beach, CA",
-    price: "$18,500,000",
-    beds: 6,
-    baths: 7,
-    area: "8,100 sqft",
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: 5,
-    title: "The Dune House",
-    location: "Monterey, CA",
-    price: "$7,400,000",
-    beds: 3,
-    baths: 3,
-    area: "3,200 sqft",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    title: "Pacific Horizon",
-    location: "Pebble Beach, CA",
-    price: "$12,900,000",
-    beds: 4,
-    baths: 5,
-    area: "5,100 sqft",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 7,
-    title: "Redwood Terrace",
-    location: "Mendocino, CA",
-    price: "$6,900,000",
-    beds: 4,
-    baths: 4,
-    area: "4,100 sqft",
-    image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 8,
-    title: "Tidewater House",
-    location: "Santa Barbara, CA",
-    price: "$10,600,000",
-    beds: 5,
-    baths: 5.5,
-    area: "5,400 sqft",
-    image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: 9,
-    title: "Driftwood Retreat",
-    location: "La Jolla, CA",
-    price: "$13,400,000",
-    beds: 5,
-    baths: 6,
-    area: "5,800 sqft",
-    image: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=800&auto=format&fit=crop",
-  },
-];
-
-const parsePrice = (price: string) => Number(price.replace(/[^0-9]/g, ''));
-const priceOptions = [8_000_000, 10_000_000, 12_000_000, 15_000_000];
-
 export default function CoastalWebHome({
   initialProperties = [],
   initialSlides = [],
@@ -276,12 +175,8 @@ export default function CoastalWebHome({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides] = useState<HeroSlide[]>(initialSlides.length ? initialSlides : fallbackSlides);
   const [properties] = useState<HomeProperty[]>(initialProperties.length ? initialProperties : fallbackProperties);
-  const [query, setQuery] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(false); // mobile only; filters are always visible on md+
   const [lead, setLead] = useState({ name: '', email: '', property: '', message: '' });
   const [leadState, setLeadState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-
-  const locations = Array.from(new Set(properties.map((p) => p.location)));
 
   const submitLead = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,28 +201,6 @@ export default function CoastalWebHome({
     }
   };
 
-  const [locationFilter, setLocationFilter] = useState('all');
-  const [minBeds, setMinBeds] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0); // 0 = any
-
-  const normalizedQuery = query.trim().toLowerCase();
-  const filteredProperties = properties.filter((p) => {
-    const matchesQuery =
-      !normalizedQuery || `${p.title} ${p.location}`.toLowerCase().includes(normalizedQuery);
-    const matchesLocation = locationFilter === 'all' || p.location === locationFilter;
-    const matchesBeds = p.beds >= minBeds;
-    const matchesPrice = maxPrice === 0 || parsePrice(p.price) <= maxPrice;
-    return matchesQuery && matchesLocation && matchesBeds && matchesPrice;
-  });
-  const hasActiveFilters =
-    normalizedQuery !== '' || locationFilter !== 'all' || minBeds !== 0 || maxPrice !== 0;
-  const resetFilters = () => {
-    setQuery('');
-    setLocationFilter('all');
-    setMinBeds(0);
-    setMaxPrice(0);
-  };
-
   // Auto-advance slideshow every 6 seconds
   useEffect(() => {
     if (slides.length < 2) return;
@@ -346,7 +219,7 @@ export default function CoastalWebHome({
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="font-semibold text-lg tracking-tight">Coastal.</span>
           <nav className="hidden md:flex items-center space-x-8 text-sm text-[#515154]">
-            <a href="#properties" className="hover:text-[#1D1D1F] transition-colors">Properties</a>
+            <Link href="/properties" className="hover:text-[#1D1D1F] transition-colors">Properties</Link>
             <a href="#vision" className="hover:text-[#1D1D1F] transition-colors">Vision</a>
             <a href="#contact" className="hover:text-[#1D1D1F] transition-colors">Inquire</a>
           </nav>
@@ -363,17 +236,13 @@ export default function CoastalWebHome({
       <div className="fixed top-16 left-0 right-0 z-40 bg-black/20 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 flex gap-6 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {zones.map((zone) => (
-            <button
+            <a
               key={zone.name}
-              type="button"
-              onClick={() => {
-                setQuery(zone.search);
-                document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              href={`/properties?q=${encodeURIComponent(zone.search)}`}
               className="shrink-0 whitespace-nowrap text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
               {zone.name}
-            </button>
+            </a>
           ))}
         </div>
       </div>
@@ -467,201 +336,8 @@ export default function CoastalWebHome({
           </div>
           <p className="text-[#515154] font-light leading-relaxed md:pt-8">
             From Mendocino to La Jolla, we represent a small collection of coastal residences
-            with exceptional design, setting and privacy. Browse what&apos;s available below, or
+            with exceptional design, setting and privacy. Explore the areas below, browse every residence, or
             reach out for a private introduction.
-          </p>
-        </div>
-      </section>
-
-      {/* --- SEARCH BAR --- */}
-      <section id="search" className="pt-12 px-6 max-w-7xl mx-auto relative z-30">
-        <form
-          role="search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="bg-white rounded-2xl shadow-lg border border-[#000000]/5 p-3 flex flex-col gap-3"
-        >
-          <div className="flex items-center gap-2 pl-3">
-            <Search className="hidden md:block w-5 h-5 text-[#515154] shrink-0" />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search name or location…"
-              aria-label="Search properties"
-              className="min-w-0 flex-1 bg-transparent px-2 md:px-4 py-3 text-sm text-[#1D1D1F] placeholder:text-[#86868B] outline-none"
-            />
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((o) => !o)}
-              aria-label="Toggle filters"
-              aria-expanded={filtersOpen}
-              aria-controls="search-filters"
-              className={`md:hidden relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
-                filtersOpen ? 'bg-[#1D1D1F] text-white' : 'bg-[#F5F5F7] text-[#1D1D1F]'
-              }`}
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-              {hasActiveFilters && !filtersOpen && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#1D1D1F] ring-2 ring-white" />
-              )}
-            </button>
-            <button
-              type="submit"
-              aria-label="Search"
-              className="shrink-0 bg-[#1D1D1F] text-white text-xs font-medium w-11 h-11 md:w-auto md:h-auto md:px-6 md:py-3 rounded-full hover:bg-[#333336] transition-all flex items-center justify-center"
-            >
-              <Search className="w-4 h-4 md:hidden" />
-              <span className="hidden md:inline">Search</span>
-            </button>
-          </div>
-
-          {/* Filters */}
-          <div
-            id="search-filters"
-            className={`${filtersOpen ? 'flex' : 'hidden'} md:flex flex-wrap items-center gap-3 px-3 pb-1 pt-3 border-t border-[#000000]/5 text-xs`}
-          >
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              aria-label="Filter by location"
-              className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
-            >
-              <option value="all">All locations</option>
-              {locations.map((loc) => (
-                <option key={loc} value={loc}>{loc}</option>
-              ))}
-            </select>
-            <select
-              value={minBeds}
-              onChange={(e) => setMinBeds(Number(e.target.value))}
-              aria-label="Minimum bedrooms"
-              className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
-            >
-              <option value={0}>Any beds</option>
-              {[3, 4, 5, 6].map((n) => (
-                <option key={n} value={n}>{n}+ beds</option>
-              ))}
-            </select>
-            <select
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              aria-label="Maximum price"
-              className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
-            >
-              <option value={0}>Any price</option>
-              {priceOptions.map((n) => (
-                <option key={n} value={n}>Up to ${n / 1_000_000}M</option>
-              ))}
-            </select>
-            <span className="text-[#515154] ml-auto">
-              {filteredProperties.length} of {properties.length} residences
-            </span>
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="text-[#1D1D1F] underline underline-offset-2 hover:text-[#515154]"
-              >
-                Reset
-              </button>
-            )}
-          </div>
-        </form>
-      </section>
-
-      {/* --- BODY: PROPERTY BENTO GRID --- */}
-      <section id="properties" className="pt-12 md:pt-16 pb-44 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredProperties.length === 0 && (
-            <p className="col-span-full text-center text-[#515154] text-sm">
-              No residences match your search and filters.
-            </p>
-          )}
-          {filteredProperties.map((prop) => {
-            const cardClass =
-              'group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] flex flex-col justify-end p-8 transition-transform duration-500 hover:-translate-y-1';
-            const content = (
-              <>
-              {/* Background Image */}
-              <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
-                <PropertyImage
-                  src={prop.image}
-                  alt={`${prop.title}, ${prop.location}`}
-                  variant="card"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                />
-              </div>
-              {/* Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-              {/* Top Details (Price Badge) */}
-              <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
-                <span className="bg-white/90 backdrop-blur-md text-black text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm">
-                  {prop.price}
-                </span>
-                <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                  <ArrowUpRight className="w-4 h-4" />
-                </span>
-              </div>
-
-              {/* Bottom Details */}
-              <div className="relative z-10 text-white">
-                <p className="text-xs text-white/70 font-medium tracking-wide uppercase mb-1">{prop.location}</p>
-                <h3 className="text-2xl font-semibold tracking-tight mb-4">{prop.title}</h3>
-
-                {/* Specifications Bar */}
-                <div className="flex items-center space-x-6 pt-4 border-t border-white/20 text-xs text-white/80 font-medium">
-                  <div className="flex items-center space-x-1.5">
-                    <Bed className="w-4 h-4" />
-                    <span>{prop.beds} Beds</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Bath className="w-4 h-4" />
-                    <span>{prop.baths} Baths</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Maximize className="w-4 h-4" />
-                    <span>{prop.area}</span>
-                  </div>
-                </div>
-              </div>
-              </>
-            );
-            return prop.href ? (
-              // Plain anchor on purpose: a full page load works on every browser, including iPhones.
-              <a key={prop.id} href={prop.href} className={cardClass} aria-label={`View ${prop.title}`}>
-                {content}
-              </a>
-            ) : (
-              <div key={prop.id} className={cardClass}>
-                {content}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Grid footer: see all / advanced search / count */}
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-sm">
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="justify-self-center md:justify-self-start inline-flex items-center space-x-2 font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
-          >
-            <span>See all properties</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </button>
-          <a
-            href="#search"
-            className="justify-self-center inline-flex items-center space-x-2 bg-[#1D1D1F] text-white text-xs font-medium px-6 py-3 rounded-full hover:bg-[#333336] transition-all"
-          >
-            <Search className="w-4 h-4" />
-            <span>Advanced search</span>
-          </a>
-          <p className="justify-self-center md:justify-self-end text-xs text-[#515154]">
-            Showing {filteredProperties.length} of {properties.length} properties
           </p>
         </div>
       </section>
@@ -676,13 +352,9 @@ export default function CoastalWebHome({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {zones.map((zone) => (
-            <button
+            <a
               key={zone.name}
-              type="button"
-              onClick={() => {
-                setQuery(zone.search);
-                document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              href={`/properties?q=${encodeURIComponent(zone.search)}`}
               className="group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] text-left p-8 flex flex-col justify-end transition-transform duration-500 hover:-translate-y-1"
             >
               <div
@@ -705,8 +377,26 @@ export default function CoastalWebHome({
                 <h3 className="text-2xl font-semibold tracking-tight mb-1">{zone.name}</h3>
                 <p className="text-sm text-white/80 font-light">{zone.description}</p>
               </div>
-            </button>
+            </a>
           ))}
+        </div>
+
+        {/* Inventory links */}
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
+          <Link
+            href="/properties"
+            className="inline-flex items-center space-x-2 font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
+          >
+            <span>See all properties</span>
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+          <Link
+            href="/properties?advanced"
+            className="inline-flex items-center space-x-2 bg-[#1D1D1F] text-white text-xs font-medium px-6 py-3 rounded-full hover:bg-[#333336] transition-all"
+          >
+            <Search className="w-4 h-4" />
+            <span>Advanced search</span>
+          </Link>
         </div>
       </section>
 
