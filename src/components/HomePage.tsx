@@ -343,7 +343,7 @@ export default function CoastalWebHome({
       </section>
 
       {/* --- FOCUS AREAS --- */}
-      <section id="areas" className="pb-44 px-6 max-w-7xl mx-auto">
+      <section id="areas" className="pt-24 md:pt-32 pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
           <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Areas We Focus On</h2>
           <p className="text-3xl md:text-4xl font-semibold tracking-tight">
