@@ -49,10 +49,17 @@ async function getAuthParams() {
   };
 }
 
+/** HTTP status and request id of ImageKit's reply, e.g. " (HTTP 503, request abc123)", for support. */
+function replyDetails(err: ImageKitInvalidRequestError | ImageKitServerError): string {
+  const meta = err.$ResponseMetadata;
+  if (!meta) return '';
+  return ` (HTTP ${meta.statusCode}${meta.requestId ? `, request ${meta.requestId}` : ''})`;
+}
+
 function describeError(err: unknown): string {
   if (err instanceof ImageKitAbortError) return 'Upload cancelled.';
   if (err instanceof ImageKitInvalidRequestError || err instanceof ImageKitServerError) {
-    return err.message || 'ImageKit rejected the upload.';
+    return (err.message || 'ImageKit rejected the upload.') + replyDetails(err);
   }
   if (err instanceof ImageKitUploadNetworkError) return 'Network error while uploading.';
   return err instanceof Error ? err.message : 'Upload failed.';
@@ -124,7 +131,11 @@ export default function ImageUpload({
         onUploaded({ url: result.url, fileId: result.fileId });
       }
     } catch (err) {
-      console.error('Image upload failed:', err);
+      console.error(
+        'Image upload failed:',
+        err,
+        (err as { $ResponseMetadata?: unknown }).$ResponseMetadata
+      );
       fail(describeError(err));
     } finally {
       setBusy(false);
