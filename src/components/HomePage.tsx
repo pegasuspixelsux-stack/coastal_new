@@ -379,7 +379,7 @@ export default function CoastalWebHome({
       </div>
 
       {/* --- HERO SLIDESHOW (5-slide full-width) --- */}
-      <section className="relative w-full h-[60vh] md:h-auto md:aspect-square lg:aspect-auto lg:h-screen overflow-hidden">
+      <section className="relative w-full h-[80vh] md:h-auto md:aspect-square lg:aspect-auto lg:h-screen overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
