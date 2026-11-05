@@ -13,15 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Coastal Web | Private Coastal Real Estate",
+  title: "Coastal | Propiedades exclusivas en Punta del Este",
   description:
-    "Curated architectural residences along the Pacific coastline, represented with absolute discretion.",
+    "Residencias de autor en Punta del Este, La Barra, José Ignacio y Manantiales, representadas con absoluta discreción.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="es-UY"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

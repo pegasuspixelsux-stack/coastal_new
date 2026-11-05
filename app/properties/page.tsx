@@ -5,8 +5,8 @@ import { PublicHeader } from '@/src/components/PublicChrome';
 import SiteFooter from '@/src/components/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'All Properties | Coastal',
-  description: 'Browse every residence in the Coastal collection and filter by location, bedrooms and price.',
+  title: 'Todas las propiedades | Coastal',
+  description: 'Recorra todas las residencias de la colección Coastal y filtre por ubicación, dormitorios y precio.',
 };
 
 // Rebuilt at most once a minute, like the homepage.
@@ -23,8 +23,8 @@ export default async function PropertiesPage({ searchParams }: Props) {
       <PublicHeader />
       <main className="pt-28 pb-32 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-10">
-          <h1 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Inventory</h1>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">All properties</p>
+          <h1 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Inventario</h1>
+          <p className="text-3xl md:text-4xl font-semibold tracking-tight">Todas las propiedades</p>
         </div>
         <PropertiesInventory
           properties={properties.length ? properties : fallbackProperties}

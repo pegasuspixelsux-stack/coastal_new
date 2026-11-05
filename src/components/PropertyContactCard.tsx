@@ -28,11 +28,11 @@ export default function PropertyContactCard({ property }: { property: Property }
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) {
-      setFormError('Please enter your name.');
+      setFormError('Ingrese su nombre.');
       return;
     }
     if (!form.email.trim() && !form.phone.trim()) {
-      setFormError('Add an email or a phone number so we can reach you.');
+      setFormError('Agregue un correo o un teléfono para que podamos contactarlo.');
       return;
     }
     setFormError(null);
@@ -60,8 +60,8 @@ export default function PropertyContactCard({ property }: { property: Property }
           {(property.agentName || 'C').charAt(0).toUpperCase()}
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wider text-[#515154] font-semibold">Listing agent</p>
-          <p className="font-medium">{property.agentName || 'Coastal Advisory'}</p>
+          <p className="text-xs uppercase tracking-wider text-[#515154] font-semibold">Agente a cargo</p>
+          <p className="font-medium">{property.agentName || 'Asesoría Coastal'}</p>
         </div>
       </div>
 
@@ -72,45 +72,45 @@ export default function PropertyContactCard({ property }: { property: Property }
           rel="noopener noreferrer"
           className="w-full inline-flex items-center justify-center gap-2 bg-[#1D1D1F] text-white py-3.5 rounded-xl text-sm font-medium hover:bg-[#333336] transition-all shadow-sm"
         >
-          <MessageCircle className="w-4 h-4" /> Chat on WhatsApp
+          <MessageCircle className="w-4 h-4" /> Escribir por WhatsApp
         </a>
       ) : (
         <p className="text-xs text-[#515154] bg-[#F5F5F7] rounded-xl px-4 py-3">
-          WhatsApp isn’t available for this listing. Send a message below and we’ll reply shortly.
+          WhatsApp no está disponible para esta propiedad. Envíenos un mensaje abajo y le responderemos a la brevedad.
         </p>
       )}
 
       <div className="flex items-center gap-3 my-6 text-xs uppercase tracking-widest text-[#86868B]">
-        <span className="h-px flex-1 bg-[#000000]/10" /> or <span className="h-px flex-1 bg-[#000000]/10" />
+        <span className="h-px flex-1 bg-[#000000]/10" /> o <span className="h-px flex-1 bg-[#000000]/10" />
       </div>
 
       {state === 'sent' ? (
         <p role="status" className="text-sm text-green-700 bg-green-50 rounded-xl px-4 py-4">
-          Thank you — an advisor will be in touch shortly.
+          Gracias: un asesor se pondrá en contacto a la brevedad.
         </p>
       ) : (
         <form onSubmit={submit} className="space-y-5" noValidate>
           <div>
-            <label htmlFor="c-name" className={labelClass}>Full name</label>
+            <label htmlFor="c-name" className={labelClass}>Nombre completo</label>
             <input id="c-name" autoComplete="name" className={inputClass} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-5">
             <div>
-              <label htmlFor="c-phone" className={labelClass}>Phone</label>
+              <label htmlFor="c-phone" className={labelClass}>Teléfono</label>
               <input id="c-phone" type="tel" autoComplete="tel" className={inputClass} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
             </div>
             <div>
-              <label htmlFor="c-email" className={labelClass}>Email</label>
+              <label htmlFor="c-email" className={labelClass}>Correo electrónico</label>
               <input id="c-email" type="email" autoComplete="email" className={inputClass} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             </div>
           </div>
           <div>
-            <label htmlFor="c-msg" className={labelClass}>Message</label>
+            <label htmlFor="c-msg" className={labelClass}>Mensaje</label>
             <textarea
               id="c-msg"
               rows={4}
               className={`${inputClass} resize-none`}
-              placeholder={`I’d like to know more about ${property.title}…`}
+              placeholder={`Quisiera más información sobre ${property.title}…`}
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
             />
@@ -118,7 +118,7 @@ export default function PropertyContactCard({ property }: { property: Property }
 
           {(formError || state === 'error') && (
             <p role="alert" className="text-sm text-red-600">
-              {formError ?? 'Something went wrong. Please try again or use WhatsApp.'}
+              {formError ?? 'Algo salió mal. Inténtelo de nuevo o use WhatsApp.'}
             </p>
           )}
 
@@ -127,7 +127,7 @@ export default function PropertyContactCard({ property }: { property: Property }
             disabled={state === 'sending'}
             className="w-full bg-white border border-[#1D1D1F] text-[#1D1D1F] py-3.5 rounded-xl text-sm font-medium hover:bg-[#1D1D1F] hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            <span>{state === 'sending' ? 'Sending…' : 'Request details'}</span>
+            <span>{state === 'sending' ? 'Enviando…' : 'Solicitar información'}</span>
             <Send className="w-4 h-4" />
           </button>
         </form>

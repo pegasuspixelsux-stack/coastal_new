@@ -13,16 +13,16 @@ export default function PropertySpecs({
 }) {
   const place = [p.location.neighborhood, p.location.city].filter(Boolean).join(', ');
   const metrics = [
-    { label: 'Operation', value: operationLabels[p.operation], icon: Tag },
-    { label: 'Type', value: typeLabels[p.type], icon: Building2 },
-    { label: 'Total area', value: `${p.specs.areaM2.toLocaleString('en-US')} m²`, icon: Maximize },
-    { label: 'Bedrooms', value: String(p.specs.bedrooms), icon: Bed },
-    { label: 'Bathrooms', value: String(p.specs.bathrooms), icon: Bath },
-    { label: 'Garages', value: p.specs.parkingSpaces === undefined ? '—' : String(p.specs.parkingSpaces), icon: Car },
+    { label: 'Operación', value: operationLabels[p.operation], icon: Tag },
+    { label: 'Tipo', value: typeLabels[p.type], icon: Building2 },
+    { label: 'Superficie total', value: `${p.specs.areaM2.toLocaleString('es-UY')} m²`, icon: Maximize },
+    { label: 'Dormitorios', value: String(p.specs.bedrooms), icon: Bed },
+    { label: 'Baños', value: String(p.specs.bathrooms), icon: Bath },
+    { label: 'Garajes', value: p.specs.parkingSpaces === undefined ? '—' : String(p.specs.parkingSpaces), icon: Car },
   ];
 
   return (
-    <section aria-label="Property highlights">
+    <section aria-label="Características de la propiedad">
       {showHeader && (
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
@@ -35,7 +35,7 @@ export default function PropertySpecs({
         </div>
         <div className="bg-[#1D1D1F] text-white rounded-2xl px-6 py-4 shrink-0">
           <p className="text-xs uppercase tracking-widest text-white/60 font-semibold mb-1">
-            {p.operation === 'sale' ? 'Price' : p.operation === 'rent' ? 'Rent / month' : 'Seasonal rate'}
+            {p.operation === 'sale' ? 'Precio' : p.operation === 'rent' ? 'Alquiler / mes' : 'Tarifa de temporada'}
           </p>
           <p className="text-2xl md:text-3xl font-semibold tracking-tight">
             {formatPriceWithCode(p.price, p.currency)}

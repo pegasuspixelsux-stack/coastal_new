@@ -9,15 +9,15 @@ export function PublicHeader() {
           Coastal.
         </Link>
         <nav className="hidden md:flex items-center space-x-8 text-sm text-[#515154]">
-          <Link href="/#properties" className="hover:text-[#1D1D1F] transition-colors">Properties</Link>
-          <Link href="/#vision" className="hover:text-[#1D1D1F] transition-colors">Vision</Link>
-          <Link href="/#contact" className="hover:text-[#1D1D1F] transition-colors">Inquire</Link>
+          <Link href="/properties" className="hover:text-[#1D1D1F] transition-colors">Propiedades</Link>
+          <Link href="/#vision" className="hover:text-[#1D1D1F] transition-colors">Nosotros</Link>
+          <Link href="/#contact" className="hover:text-[#1D1D1F] transition-colors">Contacto</Link>
         </nav>
         <Link
           href="/#contact"
           className="bg-[#1D1D1F] text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-[#333336] transition-all"
         >
-          Private Tour
+          Visita privada
         </Link>
       </div>
     </header>

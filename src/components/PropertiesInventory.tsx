@@ -57,14 +57,14 @@ export default function PropertiesInventory({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search name or location…"
-            aria-label="Search properties"
+            placeholder="Buscar por nombre o ubicación…"
+            aria-label="Buscar propiedades"
             className="min-w-0 flex-1 bg-transparent px-2 md:px-4 py-3 text-sm text-[#1D1D1F] placeholder:text-[#86868B] outline-none"
           />
           <button
             type="button"
             onClick={() => setFiltersOpen((o) => !o)}
-            aria-label="Toggle filters"
+            aria-label="Mostrar u ocultar filtros"
             aria-expanded={filtersOpen}
             aria-controls="search-filters"
             className={`md:hidden relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
@@ -85,10 +85,10 @@ export default function PropertiesInventory({
           <select
             value={locationFilter}
             onChange={(e) => setLocationFilter(e.target.value)}
-            aria-label="Filter by location"
+            aria-label="Filtrar por ubicación"
             className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
           >
-            <option value="all">All locations</option>
+            <option value="all">Todas las ubicaciones</option>
             {locations.map((loc) => (
               <option key={loc} value={loc}>{loc}</option>
             ))}
@@ -96,27 +96,27 @@ export default function PropertiesInventory({
           <select
             value={minBeds}
             onChange={(e) => setMinBeds(Number(e.target.value))}
-            aria-label="Minimum bedrooms"
+            aria-label="Dormitorios mínimos"
             className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
           >
-            <option value={0}>Any beds</option>
+            <option value={0}>Cualquier cantidad de dormitorios</option>
             {[3, 4, 5, 6].map((n) => (
-              <option key={n} value={n}>{n}+ beds</option>
+              <option key={n} value={n}>{n}+ dormitorios</option>
             ))}
           </select>
           <select
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
-            aria-label="Maximum price"
+            aria-label="Precio máximo"
             className="bg-[#F5F5F7] rounded-full px-4 py-2.5 text-[#1D1D1F] outline-none cursor-pointer"
           >
-            <option value={0}>Any price</option>
+            <option value={0}>Cualquier precio</option>
             {priceOptions.map((n) => (
-              <option key={n} value={n}>Up to ${n / 1_000_000}M</option>
+              <option key={n} value={n}>Hasta USD {n / 1_000_000} M</option>
             ))}
           </select>
           <span className="text-[#515154] ml-auto">
-            {filteredProperties.length} of {properties.length} residences
+            {filteredProperties.length} de {properties.length} residencias
           </span>
           {hasActiveFilters && (
             <button
@@ -124,7 +124,7 @@ export default function PropertiesInventory({
               onClick={resetFilters}
               className="text-[#1D1D1F] underline underline-offset-2 hover:text-[#515154]"
             >
-              Reset
+              Restablecer
             </button>
           )}
         </div>
@@ -133,7 +133,7 @@ export default function PropertiesInventory({
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
         {filteredProperties.length === 0 && (
           <p className="col-span-full text-center text-[#515154] text-sm">
-            No residences match your search and filters.
+            Ninguna residencia coincide con su búsqueda y filtros.
           </p>
         )}
         {filteredProperties.map((prop) => {
@@ -164,11 +164,11 @@ export default function PropertiesInventory({
                 <div className="flex items-center space-x-6 pt-4 border-t border-white/20 text-xs text-white/80 font-medium">
                   <div className="flex items-center space-x-1.5">
                     <Bed className="w-4 h-4" />
-                    <span>{prop.beds} Beds</span>
+                    <span>{prop.beds} Dorm.</span>
                   </div>
                   <div className="flex items-center space-x-1.5">
                     <Bath className="w-4 h-4" />
-                    <span>{prop.baths} Baths</span>
+                    <span>{prop.baths} Baños</span>
                   </div>
                   <div className="flex items-center space-x-1.5">
                     <Maximize className="w-4 h-4" />
@@ -180,7 +180,7 @@ export default function PropertiesInventory({
           );
           return prop.href ? (
             // Plain anchor on purpose: a full page load works on every browser, including iPhones.
-            <a key={prop.id} href={prop.href} className={cardClass} aria-label={`View ${prop.title}`}>
+            <a key={prop.id} href={prop.href} className={cardClass} aria-label={`Ver ${prop.title}`}>
               {content}
             </a>
           ) : (

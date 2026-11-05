@@ -11,29 +11,29 @@ export default function SiteFooter() {
         <div className="space-y-4">
           <span className="text-lg font-semibold tracking-tight text-white">Coastal.</span>
           <p className="text-xs text-white/60 leading-relaxed font-light">
-            Redefining architectural property acquisition along the Pacific Coast with absolute precision and elegance.
+            Redefinimos la compra de propiedades de autor en Punta del Este con precisión, criterio y elegancia.
           </p>
         </div>
 
         {/* Column 2: Portfolio */}
         <div className="space-y-4">
-          <p className="text-xs uppercase tracking-widest text-white/40 font-semibold">Portfolio</p>
+          <p className="text-xs uppercase tracking-widest text-white/40 font-semibold">Portafolio</p>
           <ul className="space-y-2.5 text-xs text-white/80 font-light">
-            <li><Link href="/#properties" className={linkClass}>Big Sur Residences</Link></li>
-            <li><Link href="/#properties" className={linkClass}>Malibu Estates</Link></li>
-            <li><Link href="/#properties" className={linkClass}>Carmel Architecture</Link></li>
-            <li><Link href="/#properties" className={linkClass}>Laguna Beachfront</Link></li>
+            <li><Link href="/properties?q=José Ignacio" className={linkClass}>Residencias en José Ignacio</Link></li>
+            <li><Link href="/properties?q=La Barra" className={linkClass}>Casas en La Barra</Link></li>
+            <li><Link href="/properties?q=Manantiales" className={linkClass}>Chacras en Manantiales</Link></li>
+            <li><Link href="/properties?q=Punta Ballena" className={linkClass}>Frente al mar en Punta Ballena</Link></li>
           </ul>
         </div>
 
         {/* Column 3: Company */}
         <div className="space-y-4">
-          <p className="text-xs uppercase tracking-widest text-white/40 font-semibold">Company</p>
+          <p className="text-xs uppercase tracking-widest text-white/40 font-semibold">Empresa</p>
           <ul className="space-y-2.5 text-xs text-white/80 font-light">
-            <li><Link href="/#vision" className={linkClass}>Our Vision</Link></li>
-            <li><Link href="/#contact" className={linkClass}>Advisory Board</Link></li>
-            <li><Link href="/#contact" className={linkClass}>Press &amp; Awards</Link></li>
-            <li><Link href="/#contact" className={linkClass}>Careers</Link></li>
+            <li><Link href="/#vision" className={linkClass}>Nuestra visión</Link></li>
+            <li><Link href="/#contact" className={linkClass}>Equipo asesor</Link></li>
+            <li><Link href="/#contact" className={linkClass}>Prensa y premios</Link></li>
+            <li><Link href="/#contact" className={linkClass}>Trabaje con nosotros</Link></li>
           </ul>
         </div>
 
@@ -41,18 +41,18 @@ export default function SiteFooter() {
         <div className="space-y-4">
           <p className="text-xs uppercase tracking-widest text-white/40 font-semibold">Legal</p>
           <ul className="space-y-2.5 text-xs text-white/80 font-light">
-            <li><a href="#" className={linkClass}>Privacy Policy</a></li>
-            <li><a href="#" className={linkClass}>Terms of Service</a></li>
-            <li><a href="#" className={linkClass}>Brokerage License #0291918</a></li>
-            <li><Link href="/admin/login" className={linkClass}>Admin</Link></li>
+            <li><a href="#" className={linkClass}>Política de privacidad</a></li>
+            <li><a href="#" className={linkClass}>Términos y condiciones</a></li>
+            <li><a href="#" className={linkClass}>Corredor inmobiliario matriculado</a></li>
+            <li><Link href="/admin/login" className={linkClass}>Administración</Link></li>
           </ul>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-white/40 font-light">
-        <p>&copy; {new Date().getFullYear()} Coastal Web Estate Inc. All rights reserved.</p>
-        <p className="mt-4 md:mt-0">Designed with Apple-level attention to detail.</p>
+        <p>&copy; {new Date().getFullYear()} Coastal. Todos los derechos reservados.</p>
+        <p className="mt-4 md:mt-0">Punta del Este, Uruguay</p>
       </div>
     </footer>
   );

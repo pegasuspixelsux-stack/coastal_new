@@ -69,7 +69,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
       {/* Slides */}
       {count === 0 ? (
         <div className="absolute inset-0 flex items-center justify-center text-sm text-white/60">
-          No photos yet
+          Todavía no hay fotos
         </div>
       ) : (
         photos.map((photo, i) => (
@@ -87,7 +87,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
             >
               <NextImage
                 src={ikUrl(photo.url, IK.hero)}
-                alt={`${title}, photo ${i + 1} of ${count}`}
+                alt={`${title}, foto ${i + 1} de ${count}`}
                 fill
                 priority={i === 0}
                 unoptimized
@@ -104,7 +104,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Open full-screen gallery"
+          aria-label="Abrir galería a pantalla completa"
           className="absolute inset-0 z-[1] cursor-zoom-in"
         />
       )}
@@ -128,7 +128,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
                 key={photo.url}
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Go to photo ${i + 1}`}
+                aria-label={`Ir a la foto ${i + 1}`}
                 aria-current={i === index ? 'true' : undefined}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   i === index ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
@@ -144,7 +144,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
             <button
               type="button"
               onClick={() => go(-1)}
-              aria-label="Previous photo"
+              aria-label="Foto anterior"
               className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -152,7 +152,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
             <button
               type="button"
               onClick={() => go(1)}
-              aria-label="Next photo"
+              aria-label="Foto siguiente"
               className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all"
             >
               <ChevronRight className="w-5 h-5" />
@@ -188,7 +188,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
           <button
             type="button"
             onClick={() => setOpen(false)}
-            aria-label="Close gallery"
+            aria-label="Cerrar galería"
             className="absolute top-5 right-5 z-10 w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
           >
             <X className="w-5 h-5" />
@@ -200,7 +200,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
             <NextImage
               key={index}
               src={ikUrl(photos[index].url, IK.lightbox)}
-              alt={`${title}, photo ${index + 1} of ${count}`}
+              alt={`${title}, foto ${index + 1} de ${count}`}
               fill
               unoptimized
               sizes="100vw"
@@ -212,7 +212,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
               <button
                 type="button"
                 onClick={() => go(-1)}
-                aria-label="Previous photo"
+                aria-label="Foto anterior"
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
               >
                 <ChevronLeft className="w-6 h-6" />
@@ -220,7 +220,7 @@ export default function PropertyGallery({ photos, title, children }: PropertyGal
               <button
                 type="button"
                 onClick={() => go(1)}
-                aria-label="Next photo"
+                aria-label="Foto siguiente"
                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
               >
                 <ChevronRight className="w-6 h-6" />

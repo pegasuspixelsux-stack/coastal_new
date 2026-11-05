@@ -31,15 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const property = await loadProperty(id);
   if (!property) {
-    return { title: 'Property not found | Coastal Web', robots: { index: false, follow: false } };
+    return { title: 'Propiedad no encontrada | Coastal', robots: { index: false, follow: false } };
   }
 
   const place = [property.location.neighborhood, property.location.city].filter(Boolean).join(', ');
   const price = formatPriceWithCode(property.price, property.currency);
   const title = `${property.title} | ${price}`;
   const description =
-    `${operationLabels[property.operation]} · ${typeLabels[property.type]} in ${place}. ` +
-    `${property.specs.bedrooms} bed, ${property.specs.bathrooms} bath, ${property.specs.areaM2} m².`;
+    `${operationLabels[property.operation]} · ${typeLabels[property.type]} en ${place}. ` +
+    `${property.specs.bedrooms} dormitorios, ${property.specs.bathrooms} baños, ${property.specs.areaM2} m².`;
   const image = property.photos[0] ? ikUrl(property.photos[0].url, IK.og) : undefined;
 
   return {
@@ -89,8 +89,8 @@ export default async function PropertyPage({ params }: Props) {
             <PropertySpecs property={property} showHeader={false} />
 
             {property.description && (
-              <section aria-label="About this property">
-                <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-4">About this property</h2>
+              <section aria-label="Sobre esta propiedad">
+                <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-4">Sobre esta propiedad</h2>
                 <p className="text-[#515154] font-light leading-relaxed whitespace-pre-line max-w-2xl">
                   {property.description}
                 </p>

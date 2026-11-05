@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { fallbackProperties, type HeroSlide, type HomeProperty } from '@/src/lib/homeData';
+import { whatsappUrl } from '@/src/utils/format';
 import SiteFooter from '@/src/components/SiteFooter';
 import {
   ArrowUpRight,
@@ -12,6 +13,7 @@ import {
   Mail,
   Phone,
   Send,
+  MessageCircle,
   Search,
   Home,
   Key,
@@ -21,66 +23,78 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-// --- FOCUS AREAS ---
-const zones = [
+// --- ZONAS ---
+// Las zonas con `more: true` se muestran en la franja superior y en "Ver más zonas", sin tarjeta propia.
+const zones: { name: string; search: string; description: string; image: string; more?: boolean }[] = [
   {
-    name: "Big Sur",
-    search: "Big Sur",
-    description: "Dramatic cliffs and total seclusion above the Pacific.",
+    name: "José Ignacio",
+    search: "José Ignacio",
+    description: "El pueblo más reservado de la costa: dunas, faro y estancias frente al mar.",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
   },
   {
-    name: "Malibu",
-    search: "Malibu",
-    description: "Beachfront and canyon estates along the Pacific Coast Highway.",
+    name: "Manantiales",
+    search: "Manantiales",
+    description: "Casas de diseño entre pinos y dunas, a pasos de la playa más elegante del verano.",
     image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
   },
   {
-    name: "Carmel-by-the-Sea",
-    search: "Carmel",
-    description: "Storybook village charm minutes from the shoreline.",
+    name: "La Barra",
+    search: "La Barra",
+    description: "Chacras y residencias de autor sobre el arroyo Maldonado y el mar abierto.",
     image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=800&auto=format&fit=crop",
   },
   {
-    name: "Laguna Beach",
-    search: "Laguna",
-    description: "Artistic coves and oceanfront estates in Orange County.",
+    name: "Punta Ballena",
+    search: "Punta Ballena",
+    description: "Casas sobre la ladera con vistas panorámicas a la bahía y al atardecer.",
     image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=800&auto=format&fit=crop",
   },
   {
-    name: "Monterey",
-    search: "Monterey",
-    description: "Windswept dunes and historic coastal neighborhoods.",
+    name: "Laguna Garzón",
+    search: "Laguna Garzón",
+    description: "Naturaleza abierta, privacidad absoluta y terrenos frente a la laguna.",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop",
   },
   {
-    name: "Pebble Beach",
-    search: "Pebble Beach",
-    description: "Golf-course estates with sweeping ocean views.",
+    name: "Península",
+    search: "Punta del Este",
+    description: "El corazón histórico de Punta del Este: residencias clásicas y puerto a pasos.",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop",
   },
+  { name: "La Brava", search: "Brava", description: "", image: "", more: true },
+  { name: "La Mansa", search: "Mansa", description: "", image: "", more: true },
+  { name: "Chacras y Campos", search: "Chacra", description: "", image: "", more: true },
 ];
 
 // --- TEAM (placeholder people) ---
 const team = [
   {
     name: "Elena Marlowe",
-    role: "Founder & Principal Broker",
+    role: "Fundadora y corredora principal",
+    email: "elena@coastalweb.estate",
+    phone: "+598 99 000 001",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop",
   },
   {
     name: "Daniel Reyes",
-    role: "Senior Partner, Acquisitions",
+    role: "Socio senior, adquisiciones",
+    email: "daniel@coastalweb.estate",
+    phone: "+598 99 000 002",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop",
   },
   {
     name: "Sofia Lindqvist",
-    role: "Head of Client Experience",
+    role: "Directora de experiencia del cliente",
+    email: "sofia@coastalweb.estate",
+    phone: "+598 99 000 003",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=800&auto=format&fit=crop",
   },
   {
     name: "James Whitaker",
-    role: "Director of Market Strategy",
+    role: "Director de estrategia de mercado",
+    email: "james@coastalweb.estate",
+    phone: "+598 99 000 004",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop",
   },
 ];
@@ -89,77 +103,77 @@ const team = [
 const services = [
   {
     icon: Key,
-    title: "Buyer Representation",
-    description: "Private access to off-market coastal residences, with negotiation handled start to finish.",
+    title: "Representación de compradores",
+    description: "Acceso privado a residencias fuera de mercado en la costa, con la negociación a cargo nuestro de principio a fin.",
   },
   {
     icon: Home,
-    title: "Seller Advisory",
-    description: "Tailored positioning, photography and discreet marketing for architecturally significant homes.",
+    title: "Asesoramiento a vendedores",
+    description: "Posicionamiento a medida, fotografía y comercialización discreta para casas de valor arquitectónico.",
   },
   {
     icon: TrendingUp,
-    title: "Market Valuation",
-    description: "Data-driven pricing grounded in comparable sales and local coastal market trends.",
+    title: "Tasación de mercado",
+    description: "Precios basados en datos, ventas comparables y la evolución del mercado de Punta del Este.",
   },
   {
     icon: Compass,
-    title: "Private Tours",
-    description: "Scheduled, one-on-one viewings with a specialist who knows each property in detail.",
+    title: "Visitas privadas",
+    description: "Visitas coordinadas y personalizadas con un especialista que conoce cada propiedad en detalle.",
   },
   {
     icon: ShieldCheck,
-    title: "Due Diligence",
-    description: "Coordination of inspections, coastal regulations, permits and title review.",
+    title: "Debida diligencia",
+    description: "Coordinación de inspecciones, normativa costera, permisos y estudio de títulos.",
   },
   {
     icon: Sparkles,
-    title: "Concierge Relocation",
-    description: "Move-in support, from trusted contractors and designers to property management.",
+    title: "Mudanza con conserjería",
+    description: "Acompañamiento en la mudanza, desde contratistas y diseñadores de confianza hasta la administración de la propiedad.",
   },
 ];
 
-// --- HERO SLIDES DATA ---
-// Shown until featured properties load (or if there are none yet).
+// --- SLIDES DEL HERO ---
+// Se muestran hasta que carguen las propiedades destacadas (o si todavía no hay).
 const fallbackSlides: HeroSlide[] = [
   {
     id: 1,
-    title: "The Horizon Villa",
-    location: "Big Sur, California",
-    price: "$14,500,000",
-    tagline: "Absolute privacy meets endless Pacific views.",
+    title: "Villa Horizonte",
+    location: "José Ignacio, Maldonado",
+    price: "USD 14.500.000",
+    tagline: "Privacidad absoluta frente a un horizonte infinito.",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop",
   },
   {
     id: 2,
-    title: "Cliffside Sanctuary",
-    location: "Malibu, California",
-    price: "$9,800,000",
-    tagline: "Suspended between sky and sea.",
+    title: "Santuario de la Barra",
+    location: "La Barra, Maldonado",
+    price: "USD 9.800.000",
+    tagline: "Suspendida entre el cielo y el mar.",
     image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop",
   },
   {
     id: 3,
-    title: "The Glass Pavilion",
-    location: "Carmel-by-the-Sea",
-    price: "$11,200,000",
-    tagline: "Seamless architectural integration with nature.",
+    title: "Pabellón de Cristal",
+    location: "Manantiales, Maldonado",
+    price: "USD 11.200.000",
+    tagline: "Arquitectura que se integra a la naturaleza sin fisuras.",
     image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=2000&auto=format&fit=crop",
   },
   {
     id: 4,
-    title: "Ocean Blue Estate",
-    location: "Laguna Beach, California",
-    price: "$18,500,000",
-    tagline: "Timeless luxury on the water's edge.",
+    title: "Estancia Azul Océano",
+    location: "Punta Ballena, Maldonado",
+    price: "USD 18.500.000",
+    tagline: "Lujo atemporal a orillas del agua.",
     image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000&auto=format&fit=crop",
   },
   {
     id: 5,
-    title: "The Dune House",
-    location: "Monterey, California",
-    price: "$7,400,000",
-    tagline: "Minimalist living shaped by coastal winds.",
+    title: "La Casa de las Dunas",
+    location: "José Ignacio, Maldonado",
+    price: "USD 7.400.000",
+    tagline: "Vida minimalista moldeada por el viento de la costa.",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2000&auto=format&fit=crop",
   },
 ];
@@ -175,6 +189,7 @@ export default function CoastalWebHome({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides] = useState<HeroSlide[]>(initialSlides.length ? initialSlides : fallbackSlides);
   const [properties] = useState<HomeProperty[]>(initialProperties.length ? initialProperties : fallbackProperties);
+  const [showMoreZones, setShowMoreZones] = useState(false);
   const [lead, setLead] = useState({ name: '', email: '', property: '', message: '' });
   const [leadState, setLeadState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
@@ -189,7 +204,7 @@ export default function CoastalWebHome({
       await addDoc(collection(db, 'leads'), {
         name: lead.name.trim(),
         email: lead.email.trim(),
-        property: lead.property || 'General Representation',
+        property: lead.property || 'Representación general',
         message: lead.message.trim(),
         status: 'new',
         createdAt: serverTimestamp(),
@@ -219,15 +234,15 @@ export default function CoastalWebHome({
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="font-semibold text-lg tracking-tight">Coastal.</span>
           <nav className="hidden md:flex items-center space-x-8 text-sm text-[#515154]">
-            <Link href="/properties" className="hover:text-[#1D1D1F] transition-colors">Properties</Link>
-            <a href="#vision" className="hover:text-[#1D1D1F] transition-colors">Vision</a>
-            <a href="#contact" className="hover:text-[#1D1D1F] transition-colors">Inquire</a>
+            <Link href="/properties" className="hover:text-[#1D1D1F] transition-colors">Propiedades</Link>
+            <a href="#vision" className="hover:text-[#1D1D1F] transition-colors">Nosotros</a>
+            <a href="#contact" className="hover:text-[#1D1D1F] transition-colors">Contacto</a>
           </nav>
           <a
             href="#contact"
             className="bg-[#1D1D1F] text-[#FFFFFF] text-xs font-medium px-4 py-2 rounded-full hover:bg-[#333336] transition-all"
           >
-            Private Tour
+            Visita privada
           </a>
         </div>
       </header>
@@ -288,7 +303,7 @@ export default function CoastalWebHome({
                   href="#contact"
                   className="inline-flex items-center space-x-2 bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:bg-white/90 transition-all"
                 >
-                  <span>Request Details</span>
+                  <span>Solicitar información</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>
@@ -306,7 +321,7 @@ export default function CoastalWebHome({
               <button
                 key={slideIndex}
                 onClick={() => setCurrentSlide(slideIndex)}
-                aria-label={`Go to slide ${slideIndex + 1}`}
+                aria-label={`Ir a la diapositiva ${slideIndex + 1}`}
                 aria-current={active ? 'true' : undefined}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   active ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
@@ -326,32 +341,50 @@ export default function CoastalWebHome({
       </section>
 
       {/* --- INTRO --- */}
-      <section className="pt-16 md:pt-24 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20 items-start">
-          <div className="space-y-4">
-            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Pacific Coast Living</h2>
-            <p className="text-3xl md:text-4xl font-semibold tracking-tight">
-              Architectural homes, chosen with care.
+      <section className="pt-28 md:pt-40 pb-12 md:pb-20 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20 items-stretch">
+          <div className="flex flex-col justify-between gap-8">
+            <div className="space-y-4">
+              <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Vivir en Punta del Este</h2>
+              <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+                Casas de autor, elegidas con criterio.
+              </p>
+            </div>
+            <Link
+              href="/properties"
+              className="inline-flex items-center space-x-2 text-sm font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
+            >
+              <span>Ver todas las propiedades</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="space-y-5 text-[#515154] font-light leading-relaxed md:pt-8">
+            <p>
+              Desde Punta del Este hasta José Ignacio, representamos una colección acotada de
+              residencias de diseño excepcional, con entorno y privacidad únicos. Cada casa se
+              elige tanto por cómo se asienta en el paisaje como por su arquitectura, desde
+              refugios entre las dunas hasta casas tranquilas a pasos del mar.
+            </p>
+            <p>
+              Explore las zonas, recorra todas las propiedades o solicite una presentación
+              privada. Trabajamos con un número limitado de clientes a la vez, para que cada
+              búsqueda y cada venta reciba nuestra atención personal desde la primera
+              conversación hasta la escritura.
             </p>
           </div>
-          <p className="text-[#515154] font-light leading-relaxed md:pt-8">
-            From Mendocino to La Jolla, we represent a small collection of coastal residences
-            with exceptional design, setting and privacy. Explore the areas below, browse every residence, or
-            reach out for a private introduction.
-          </p>
         </div>
       </section>
 
       {/* --- FOCUS AREAS --- */}
       <section id="areas" className="pt-24 md:pt-32 pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
-          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Areas We Focus On</h2>
+          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Zonas en las que trabajamos</h2>
           <p className="text-3xl md:text-4xl font-semibold tracking-tight">
-            Six stretches of coastline, known intimately.
+            Seis zonas exclusivas de la costa, conocidas a fondo.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {zones.map((zone) => (
+          {zones.filter((z) => !z.more).map((zone) => (
             <a
               key={zone.name}
               href={`/properties?q=${encodeURIComponent(zone.search)}`}
@@ -367,7 +400,7 @@ export default function CoastalWebHome({
                   const count = properties.filter((p) =>
                     p.location.toLowerCase().includes(zone.search.toLowerCase())
                   ).length;
-                  return `${count} ${count === 1 ? 'property' : 'properties'}`;
+                  return `${count} ${count === 1 ? 'propiedad' : 'propiedades'}`;
                 })()}
               </span>
               <span className="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
@@ -382,51 +415,76 @@ export default function CoastalWebHome({
         </div>
 
         {/* Inventory links */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-sm">
           <Link
             href="/properties"
-            className="inline-flex items-center space-x-2 font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
+            className="justify-self-center md:justify-self-start inline-flex items-center space-x-2 font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
           >
-            <span>See all properties</span>
+            <span>Ver todas las propiedades</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
           <Link
             href="/properties?advanced"
-            className="inline-flex items-center space-x-2 bg-[#1D1D1F] text-white text-xs font-medium px-6 py-3 rounded-full hover:bg-[#333336] transition-all"
+            className="justify-self-center inline-flex items-center space-x-2 bg-[#1D1D1F] text-white text-xs font-medium px-6 py-3 rounded-full hover:bg-[#333336] transition-all"
           >
             <Search className="w-4 h-4" />
-            <span>Advanced search</span>
+            <span>Búsqueda avanzada</span>
           </Link>
+          <button
+            type="button"
+            onClick={() => setShowMoreZones((o) => !o)}
+            aria-expanded={showMoreZones}
+            className="justify-self-center md:justify-self-end inline-flex items-center space-x-2 font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
+          >
+            <span>{showMoreZones ? "Ver menos zonas" : "Ver más zonas"}</span>
+            <ArrowUpRight className={`w-4 h-4 transition-transform ${showMoreZones ? "rotate-90" : ""}`} />
+          </button>
         </div>
+
+        {showMoreZones && (
+          <ul className="mt-6 flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-sm">
+            {zones.filter((z) => z.more).map((zone) => (
+              <li key={zone.name}>
+                <Link
+                  href={`/properties?q=${encodeURIComponent(zone.search)}`}
+                  className="inline-flex items-center space-x-1 text-[#515154] hover:text-[#1D1D1F] transition-colors"
+                >
+                  <span>{zone.name}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       {/* --- WHO WE ARE --- */}
       <section id="vision" className="pb-44 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="space-y-6">
-            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Who We Are</h2>
+            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Quiénes somos</h2>
             <p className="text-3xl md:text-4xl font-semibold tracking-tight">
-              A boutique brokerage devoted to the Pacific Coast.
+              Una inmobiliaria boutique dedicada a Punta del Este.
             </p>
             <p className="text-[#515154] font-light leading-relaxed">
-              Coastal represents a small, carefully chosen collection of architectural residences
-              from Mendocino to La Jolla. We work with a limited number of clients at a time, so
-              every acquisition and every sale gets our full attention.
+              Coastal representa una colección pequeña y cuidadosamente elegida de residencias de
+              autor, de Punta del Este a José Ignacio. Trabajamos con un número limitado de
+              clientes a la vez, para dedicar toda nuestra atención a cada compra y a cada venta.
             </p>
             <p className="text-[#515154] font-light leading-relaxed">
-              Our team combines deep local knowledge with a passion for design, guiding buyers
-              through each step with discretion, precision and care.
+              Nuestro equipo combina un profundo conocimiento local con pasión por el diseño, y
+              acompaña a cada comprador en todos los pasos con discreción, precisión y cuidado.
             </p>
             <a
               href="#contact"
               className="inline-flex items-center space-x-2 text-sm font-medium text-[#1D1D1F] hover:text-[#515154] transition-colors"
             >
-              <span>Get in touch</span>
+              <span>Contáctenos</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
           <div
-            className="aspect-[4/3] rounded-2xl bg-cover bg-center bg-[#E5E5EA]"
+            className="aspect-square rounded-2xl bg-cover bg-center bg-[#E5E5EA]"
             style={{
               backgroundImage:
                 'url(https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1200&auto=format&fit=crop)',
@@ -438,9 +496,9 @@ export default function CoastalWebHome({
       {/* --- SERVICES --- */}
       <section id="services" className="pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
-          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Our Services</h2>
+          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Nuestros servicios</h2>
           <p className="text-3xl md:text-4xl font-semibold tracking-tight">
-            Everything you need, handled with care.
+            Todo lo que necesita, resuelto con cuidado.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -462,9 +520,9 @@ export default function CoastalWebHome({
       {/* --- TEAM --- */}
       <section id="team" className="pb-44 px-6 max-w-7xl mx-auto">
         <div className="max-w-xl mb-16">
-          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Our Team</h2>
+          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Nuestro equipo</h2>
           <p className="text-3xl md:text-4xl font-semibold tracking-tight">
-            The people behind every residence.
+            Las personas detrás de cada residencia.
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -478,6 +536,21 @@ export default function CoastalWebHome({
               />
               <h3 className="text-base font-semibold tracking-tight">{member.name}</h3>
               <p className="text-xs text-[#515154] font-light mt-1">{member.role}</p>
+              <div className="mt-3 flex flex-col gap-1 text-xs">
+                <a href={`mailto:${member.email}`} className="inline-flex items-center gap-1.5 text-[#1D1D1F] hover:text-[#515154] transition-colors break-all">
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  <span>{member.email}</span>
+                </a>
+                <a
+                  href={whatsappUrl(member.phone, "Hola, quisiera hacer una consulta.") ?? `tel:${member.phone}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[#1D1D1F] hover:text-[#515154] transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>WhatsApp {member.phone}</span>
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -489,12 +562,12 @@ export default function CoastalWebHome({
 
           {/* Left Column: Company Data & Value Prop */}
           <div>
-            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Private Acquisition</h2>
+            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">Adquisición privada</h2>
             <p className="text-3xl md:text-5xl font-semibold tracking-tight mb-6">
-              Begin your journey to exceptional coastal living.
+              Comience su camino hacia una vida excepcional junto al mar.
             </p>
             <p className="text-[#515154] font-light leading-relaxed mb-12">
-              Our advisors operate with absolute discretion, representing premier architectural landmarks along the Pacific coastline. Connect with us to schedule a private viewing or list a distinguished property.
+              Nuestros asesores trabajan con absoluta discreción y representan referentes de la arquitectura en la costa de Punta del Este. Contáctenos para coordinar una visita privada o para publicar una propiedad distinguida.
             </p>
 
             <div className="space-y-6 pt-6 border-t border-[#000000]/10">
@@ -503,8 +576,8 @@ export default function CoastalWebHome({
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Headquarters</p>
-                  <p className="text-sm font-medium">101 Ocean Avenue, Carmel-by-the-Sea, CA</p>
+                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Oficina</p>
+                  <p className="text-sm font-medium">Av. Gorlero 1010, Punta del Este, Maldonado</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -512,7 +585,7 @@ export default function CoastalWebHome({
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Direct Inquiry</p>
+                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Consultas</p>
                   <p className="text-sm font-medium">concierge@coastalweb.estate</p>
                 </div>
               </div>
@@ -521,8 +594,8 @@ export default function CoastalWebHome({
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Telephone</p>
-                  <p className="text-sm font-medium">+1 (831) 555-0199</p>
+                  <p className="text-xs text-[#515154] uppercase tracking-wider font-semibold">Teléfono</p>
+                  <p className="text-sm font-medium">+598 42 000 000</p>
                 </div>
               </div>
             </div>
@@ -532,35 +605,35 @@ export default function CoastalWebHome({
           <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-[#000000]/5">
             <form onSubmit={submitLead} className="space-y-6">
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Full Name</label>
+                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Nombre completo</label>
                 <input
                   type="text"
                   required
                   value={lead.name}
                   onChange={(e) => setLead({ ...lead, name: e.target.value })}
-                  placeholder="Jonathan Vance"
+                  placeholder="Juan Pérez"
                   className="w-full bg-[#FBFBFD] border border-[#000000]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1D1D1F] transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Email Address</label>
+                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Correo electrónico</label>
                 <input
                   type="email"
                   required
                   value={lead.email}
                   onChange={(e) => setLead({ ...lead, email: e.target.value })}
-                  placeholder="jonathan@vance.com"
+                  placeholder="juan@ejemplo.com"
                   className="w-full bg-[#FBFBFD] border border-[#000000]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1D1D1F] transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Property of Interest</label>
+                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Propiedad de interés</label>
                 <select
                   value={lead.property}
                   onChange={(e) => setLead({ ...lead, property: e.target.value })}
                   className="w-full bg-[#FBFBFD] border border-[#000000]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1D1D1F] transition-colors text-[#1D1D1F]"
                 >
-                  <option value="">General Representation</option>
+                  <option value="">Representación general</option>
                   {properties.map((p) => (
                     <option key={p.id} value={`${p.title}, ${p.location}`}>
                       {p.title}, {p.location}
@@ -569,12 +642,12 @@ export default function CoastalWebHome({
                 </select>
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Message</label>
+                <label className="block text-xs uppercase tracking-wider font-semibold text-[#515154] mb-2">Mensaje</label>
                 <textarea
                   rows={4}
                   value={lead.message}
                   onChange={(e) => setLead({ ...lead, message: e.target.value })}
-                  placeholder="Share your timeline or specific requirements..."
+                  placeholder="Cuéntenos sus plazos o requisitos específicos..."
                   className="w-full bg-[#FBFBFD] border border-[#000000]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1D1D1F] transition-colors resize-none"
                 />
               </div>
@@ -583,17 +656,17 @@ export default function CoastalWebHome({
                 disabled={leadState === 'sending'}
                 className="w-full bg-[#1D1D1F] text-white py-3.5 rounded-xl text-sm font-medium hover:bg-[#333336] transition-all flex items-center justify-center space-x-2 shadow-sm disabled:opacity-50"
               >
-                <span>{leadState === 'sending' ? 'Sending…' : 'Submit Inquiry'}</span>
+                <span>{leadState === 'sending' ? 'Enviando…' : 'Enviar consulta'}</span>
                 <Send className="w-4 h-4" />
               </button>
               {leadState === 'sent' && (
                 <p role="status" className="text-sm text-green-700 text-center">
-                  Thank you — an advisor will be in touch shortly.
+                  Gracias: un asesor se pondrá en contacto a la brevedad.
                 </p>
               )}
               {leadState === 'error' && (
                 <p role="alert" className="text-sm text-red-600 text-center">
-                  Something went wrong. Please try again or email us directly.
+                  Algo salió mal. Inténtelo de nuevo o escríbanos directamente por correo.
                 </p>
               )}
             </form>

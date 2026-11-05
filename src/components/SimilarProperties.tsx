@@ -36,18 +36,18 @@ export default function SimilarProperties({ properties }: { properties: Property
   if (!properties.length) return null;
 
   return (
-    <section aria-label="Similar properties" className="max-w-7xl mx-auto px-6 pb-28 md:pb-40">
+    <section aria-label="Propiedades similares" className="max-w-7xl mx-auto px-6 pb-28 md:pb-40">
       <div className="flex items-end justify-between gap-4 mb-10">
         <div>
-          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">You may also like</h2>
-          <p className="text-3xl md:text-4xl font-semibold tracking-tight">Similar properties</p>
+          <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold mb-3">También le puede interesar</h2>
+          <p className="text-3xl md:text-4xl font-semibold tracking-tight">Propiedades similares</p>
         </div>
         <div className="hidden sm:flex items-center gap-3">
           <button
             type="button"
             onClick={() => scroll(-1)}
             disabled={!canPrev}
-            aria-label="Previous properties"
+            aria-label="Propiedades anteriores"
             className="w-11 h-11 rounded-full bg-white border border-[#000000]/5 flex items-center justify-center hover:bg-[#F5F5F7] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -56,7 +56,7 @@ export default function SimilarProperties({ properties }: { properties: Property
             type="button"
             onClick={() => scroll(1)}
             disabled={!canNext}
-            aria-label="Next properties"
+            aria-label="Propiedades siguientes"
             className="w-11 h-11 rounded-full bg-white border border-[#000000]/5 flex items-center justify-center hover:bg-[#F5F5F7] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <ChevronRight className="w-5 h-5" />
@@ -74,7 +74,7 @@ export default function SimilarProperties({ properties }: { properties: Property
             {/* Plain anchor on purpose: a full page load works on every browser, including iPhones. */}
             <a
               href={`/properties/${p.id}`}
-              aria-label={`View ${p.title}`}
+              aria-label={`Ver ${p.title}`}
               className="group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] flex flex-col justify-end p-8 transition-transform duration-500 hover:-translate-y-1"
             >
               <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
@@ -90,7 +90,7 @@ export default function SimilarProperties({ properties }: { properties: Property
               <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
                 <span className="bg-white/90 backdrop-blur-md text-black text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm">
                   {formatMoney(p.price, p.currency)}
-                  {p.operation === 'rent' ? ' / mo' : ''}
+                  {p.operation === 'rent' ? ' / mes' : ''}
                 </span>
                 <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                   <ArrowUpRight className="w-4 h-4" />
@@ -105,15 +105,15 @@ export default function SimilarProperties({ properties }: { properties: Property
                 <div className="flex items-center space-x-6 pt-4 border-t border-white/20 text-xs text-white/80 font-medium">
                   <div className="flex items-center space-x-1.5">
                     <Bed className="w-4 h-4" />
-                    <span>{p.specs.bedrooms} Beds</span>
+                    <span>{p.specs.bedrooms} Dorm.</span>
                   </div>
                   <div className="flex items-center space-x-1.5">
                     <Bath className="w-4 h-4" />
-                    <span>{p.specs.bathrooms} Baths</span>
+                    <span>{p.specs.bathrooms} Baños</span>
                   </div>
                   <div className="flex items-center space-x-1.5">
                     <Maximize className="w-4 h-4" />
-                    <span>{p.specs.areaM2.toLocaleString('en-US')} m²</span>
+                    <span>{p.specs.areaM2.toLocaleString('es-UY')} m²</span>
                   </div>
                 </div>
               </div>
