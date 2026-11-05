@@ -456,15 +456,32 @@ export default function CoastalWebHome({
         </div>
       </section>
 
+      {/* --- INTRO --- */}
+      <section className="pt-16 md:pt-24 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20 items-start">
+          <div className="space-y-4">
+            <h2 className="text-xs uppercase tracking-widest text-[#515154] font-semibold">Pacific Coast Living</h2>
+            <p className="text-3xl md:text-4xl font-semibold tracking-tight">
+              Architectural homes, chosen with care.
+            </p>
+          </div>
+          <p className="text-[#515154] font-light leading-relaxed md:pt-8">
+            From Mendocino to La Jolla, we represent a small collection of coastal residences
+            with exceptional design, setting and privacy. Browse what&apos;s available below, or
+            reach out for a private introduction.
+          </p>
+        </div>
+      </section>
+
       {/* --- SEARCH BAR --- */}
-      <section id="search" className="px-6 max-w-7xl mx-auto h-0 relative z-30">
+      <section id="search" className="pt-12 px-6 max-w-7xl mx-auto relative z-30">
         <form
           role="search"
           onSubmit={(e) => {
             e.preventDefault();
             document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
           }}
-          className="-translate-y-1/2 bg-white rounded-2xl shadow-lg border border-[#000000]/5 p-3 flex flex-col gap-3"
+          className="bg-white rounded-2xl shadow-lg border border-[#000000]/5 p-3 flex flex-col gap-3"
         >
           <div className="flex items-center gap-2 pl-3">
             <Search className="hidden md:block w-5 h-5 text-[#515154] shrink-0" />
@@ -556,7 +573,7 @@ export default function CoastalWebHome({
       </section>
 
       {/* --- BODY: PROPERTY BENTO GRID --- */}
-      <section id="properties" className="pt-20 md:pt-32 pb-44 px-6 max-w-7xl mx-auto">
+      <section id="properties" className="pt-12 md:pt-16 pb-44 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredProperties.length === 0 && (
             <p className="col-span-full text-center text-[#515154] text-sm">
