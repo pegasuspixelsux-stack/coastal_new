@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { LayoutGrid, Plus, Rows3 } from 'lucide-react';
+import { FileSpreadsheet, LayoutGrid, Plus, Rows3 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { useProperties } from '@/src/hooks/useProperties';
 import { seedSampleProperties } from '@/src/services/dbService';
@@ -83,12 +83,20 @@ export default function PropertiesPage() {
         title="Properties"
         description={`${items.length} listing${items.length === 1 ? '' : 's'} loaded`}
         action={
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/dashboard/properties/import"
+              className="inline-flex items-center gap-2 bg-white border border-[#1D1D1F] text-[#1D1D1F] text-xs font-medium px-5 py-3 rounded-full hover:bg-[#1D1D1F] hover:text-white transition-all"
+            >
+              <FileSpreadsheet className="w-4 h-4" /> Import from Excel
+            </Link>
           <Link
-            href="/dashboard/properties/new"
-            className="inline-flex items-center gap-2 bg-[#1D1D1F] text-white text-xs font-medium px-5 py-3 rounded-full hover:bg-[#333336] transition-all"
-          >
-            <Plus className="w-4 h-4" /> Add listing
-          </Link>
+              href="/dashboard/properties/new"
+              className="inline-flex items-center gap-2 bg-[#1D1D1F] text-white text-xs font-medium px-5 py-3 rounded-full hover:bg-[#333336] transition-all"
+            >
+              <Plus className="w-4 h-4" /> Add listing
+            </Link>
+          </div>
         }
       />
 
