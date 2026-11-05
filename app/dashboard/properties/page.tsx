@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { FileSpreadsheet, LayoutGrid, Plus, Rows3 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { useProperties } from '@/src/hooks/useProperties';
-import { seedSampleProperties } from '@/src/services/dbService';
+import { MAX_FEATURED } from '@/src/lib/featured';
+import { countFeaturedProperties, seedSampleProperties } from '@/src/services/dbService';
 import { PropertyGrid, PropertyTable } from '@/src/components/dashboard/PropertyViews';
 import { PageHeader, cardClass } from '@/src/components/dashboard/ui';
 import { operationLabels, statusLabels, typeLabels } from '@/src/utils/format';
@@ -89,6 +90,10 @@ export default function PropertiesPage() {
   const onToggleFeatured = async (p: Property) => {
     setActionError(null);
     try {
+      if (!p.featured && (await countFeaturedProperties(p.id)) >= MAX_FEATURED) {
+        setActionError(`Only ${MAX_FEATURED} listings can be featured on the homepage. Remove the star from another listing first.`);
+        return;
+      }
       await update(p, { featured: !p.featured });
     } catch {
       setActionError('Could not update the property. You can only change your own listings.');
@@ -193,9 +198,9 @@ export default function PropertiesPage() {
         </div>
       </div>
 
-      {featuredCount > 5 && (
+      {featuredCount > MAX_FEATURED && (
         <p className="mb-4 rounded-2xl bg-[#F5F5F7] px-5 py-3 text-sm">
-          {featuredCount} listings are featured. The homepage hero shows the 5 most recent.
+          {featuredCount} listings are featured, but only {MAX_FEATURED} are allowed. Remove the star from {featuredCount - MAX_FEATURED} of them; until then the hero shows the {MAX_FEATURED} most recent.
         </p>
       )}
 

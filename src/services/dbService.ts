@@ -136,6 +136,14 @@ export async function deleteProperty(id: string): Promise<void> {
   await deleteDoc(doc(requireDb(), PROPERTIES, id));
 }
 
+/** How many active listings are currently featured on the homepage hero (optionally ignoring one). */
+export async function countFeaturedProperties(exceptId?: string): Promise<number> {
+  const snap = await getDocs(
+    query(collection(requireDb(), PROPERTIES), where('featured', '==', true), where('status', '==', 'active'))
+  );
+  return snap.docs.filter((d) => d.id !== exceptId).length;
+}
+
 /** Active (publicly visible) properties, newest first. */
 export async function getActiveProperties(maxResults = 300): Promise<Property[]> {
   const snap = await getDocs(

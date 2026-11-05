@@ -2,6 +2,7 @@ import { getActiveProperties } from '../services/dbService';
 import type { Property } from '../types/firestore';
 import { formatMoney, operationLabels, typeLabels } from '../utils/format';
 import { ikUrl } from '../utils/imagekit';
+import { MAX_FEATURED } from './featured';
 
 export type HeroSlide = {
   id: number | string;
@@ -64,13 +65,13 @@ function toHomeProperty(p: Property): HomeProperty {
 /**
  * Homepage data, loaded on the server so the links to each property page are in the
  * HTML that reaches the browser (no client-side database request needed).
- * Hero: featured properties (newest first, max 5); if none are featured, the newest 5.
+ * Hero: featured properties (newest first, max MAX_FEATURED); if none are featured, the newest ones.
  */
 export async function loadHomeData(): Promise<{ properties: HomeProperty[]; slides: HeroSlide[] }> {
   try {
     const active = await getActiveProperties();
     const featured = active.filter((p) => p.featured);
-    const hero = (featured.length ? featured : active).slice(0, 5);
+    const hero = (featured.length ? featured : active).slice(0, MAX_FEATURED);
     return { properties: active.map(toHomeProperty), slides: hero.map(toSlide) };
   } catch {
     return { properties: [], slides: [] }; // the page falls back to its built-in samples

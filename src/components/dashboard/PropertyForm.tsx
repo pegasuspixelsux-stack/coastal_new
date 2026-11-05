@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { MAX_FEATURED } from '../../lib/featured';
+import { countFeaturedProperties } from '../../services/dbService';
 import ImageUpload from '../ImageUpload';
 import PropertyImage from '../PropertyImage';
 import type {
@@ -156,6 +158,14 @@ export default function PropertyForm({ initial, submitLabel, onSubmit }: Propert
     setSaving(true);
     setError(null);
     try {
+      // The hero shows at most MAX_FEATURED slides, so refuse a new featured listing beyond that.
+      if (form.featured && form.status === 'active' && !(initial?.featured && initial.status === 'active')) {
+        if ((await countFeaturedProperties(initial?.id)) >= MAX_FEATURED) {
+          setError(`Only ${MAX_FEATURED} listings can be featured. Remove the star from another listing first.`);
+          setSaving(false);
+          return;
+        }
+      }
       await onSubmit({
         title: form.title.trim(),
         description: form.description.trim(),
@@ -168,6 +178,7 @@ export default function PropertyForm({ initial, submitLabel, onSubmit }: Propert
           city: form.city.trim(),
           neighborhood: form.neighborhood.trim() || undefined,
           address: form.address.trim() || undefined,
+          state: initial?.location.state, // the form has no state field; keep what is stored
           country: form.country.trim(),
         },
         specs: {
@@ -269,7 +280,7 @@ export default function PropertyForm({ initial, submitLabel, onSubmit }: Propert
               <input type="checkbox" className="mt-0.5" checked={form.featured} onChange={(e) => set('featured', e.target.checked)} />
               <span>
                 <span className="font-medium">Feature on the homepage</span>
-                <span className="block text-xs text-[#515154] mt-0.5">Shown as a slide in the hero (the 5 most recent featured listings).</span>
+                <span className="block text-xs text-[#515154] mt-0.5">Shown as a slide in the hero. Up to 5 listings can be featured.</span>
               </span>
             </label>
             <div className="grid grid-cols-3 gap-6">

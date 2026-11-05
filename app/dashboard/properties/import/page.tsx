@@ -4,7 +4,8 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { Download, FileSpreadsheet, Upload } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
-import { createProperty } from '@/src/services/dbService';
+import { MAX_FEATURED } from '@/src/lib/featured';
+import { countFeaturedProperties, createProperty } from '@/src/services/dbService';
 import { sampleProperties } from '@/src/data/sampleProperties';
 import { IMPORT_COLUMNS, parseSheetRows, type ParsedRow } from '@/src/lib/propertyImport';
 import { PageHeader, cardClass } from '@/src/components/dashboard/ui';
@@ -17,7 +18,7 @@ export default function ImportPropertiesPage() {
   const [fileError, setFileError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [result, setResult] = useState<{ created: number; failed: string[] } | null>(null);
+  const [result, setResult] = useState<{ created: number; failed: string[]; notFeatured: number } | null>(null);
 
   const valid = rows.filter((r) => r.data);
   const invalid = rows.filter((r) => !r.data);
@@ -99,10 +100,25 @@ export default function ImportPropertiesPage() {
     setProgress(0);
     const failed: string[] = [];
     let created = 0;
+    // Only MAX_FEATURED listings can be featured; extra "Destacada = si" rows import as normal listings.
+    let featuredLeft = MAX_FEATURED;
+    try {
+      featuredLeft = MAX_FEATURED - (await countFeaturedProperties());
+    } catch {}
+    let notFeatured = 0;
     for (const r of valid) {
       try {
+        let featured = r.data!.featured;
+        if (featured && r.data!.status === 'active') {
+          if (featuredLeft > 0) featuredLeft -= 1;
+          else {
+            featured = false;
+            notFeatured += 1;
+          }
+        }
         await createProperty({
           ...r.data!,
+          featured,
           agentId: agent.id,
           agentName: agent.name,
           agentPhone: agent.phone,
@@ -113,7 +129,7 @@ export default function ImportPropertiesPage() {
       }
       setProgress((p) => p + 1);
     }
-    setResult({ created, failed });
+    setResult({ created, failed, notFeatured });
     setRows([]);
     setFileName('');
     if (fileInput.current) fileInput.current.value = '';
@@ -225,6 +241,11 @@ export default function ImportPropertiesPage() {
             <p className="text-sm text-green-700">
               Done: {result.created} {result.created === 1 ? 'property' : 'properties'} created.
             </p>
+            {result.notFeatured > 0 && (
+              <p className="text-sm text-[#515154]">
+                {result.notFeatured} {result.notFeatured === 1 ? 'listing was' : 'listings were'} imported without the featured star, because only {MAX_FEATURED} listings can be featured.
+              </p>
+            )}
             {result.failed.length > 0 && (
               <div className="text-sm text-red-600">
                 <p>These could not be saved (check your Firestore rules or permissions):</p>
