@@ -268,22 +268,24 @@ export default function CoastalWebHome({
           </div>
         ))}
 
-        {/* Slideshow indicator: 3 vertical dots (first / middle / last slide) */}
-        <div className={`absolute top-1/2 -translate-y-1/2 right-6 z-20 flex flex-col items-center gap-3 ${slides.length < 2 ? 'hidden' : ''}`}>
-          {Array.from(new Set([0, Math.floor((slides.length - 1) / 2), slides.length - 1])).map((slideIndex, dot, arr) => {
-            // The active dot is the one whose slide index is closest to the current slide.
-            const active =
-              arr.reduce((best, v, i) => (Math.abs(v - currentSlide) < Math.abs(arr[best] - currentSlide) ? i : best), 0) === dot;
+        {/* Slideshow indicator: one vertical bar per slide (the active one is taller) */}
+        <div className={`absolute top-1/2 -translate-y-1/2 right-3 z-20 flex flex-col items-center gap-1 ${slides.length < 2 ? "hidden" : ""}`}>
+          {slides.map((slide, slideIndex) => {
+            const active = slideIndex === currentSlide;
             return (
               <button
-                key={slideIndex}
+                key={slide.id}
                 onClick={() => setCurrentSlide(slideIndex)}
                 aria-label={`Ir a la diapositiva ${slideIndex + 1}`}
-                aria-current={active ? 'true' : undefined}
-                className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  active ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
-                }`}
-              />
+                aria-current={active ? "true" : undefined}
+                className="group px-3 py-1 flex justify-center"
+              >
+                <span
+                  className={`block w-1 rounded-full transition-all duration-300 ${
+                    active ? "h-10 bg-white" : "h-5 bg-white/40 group-hover:bg-white/70"
+                  }`}
+                />
+              </button>
             );
           })}
         </div>
