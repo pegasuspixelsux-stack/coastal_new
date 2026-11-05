@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Link from 'next/link';
 import type { HeroSlide, HomeProperty } from '@/src/lib/homeData';
 import SiteFooter from '@/src/components/SiteFooter';
 import PropertyImage from '@/src/components/PropertyImage';
@@ -361,7 +360,7 @@ export default function CoastalWebHome({
       </header>
 
       {/* --- HERO SLIDESHOW (5-slide full-width) --- */}
-      <section className="relative w-full h-[90vh] md:h-screen overflow-hidden">
+      <section className="relative w-full h-[90vh] md:h-auto md:aspect-square lg:aspect-auto lg:h-screen overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
@@ -596,9 +595,10 @@ export default function CoastalWebHome({
               </>
             );
             return prop.href ? (
-              <Link key={prop.id} href={prop.href} className={cardClass} aria-label={`View ${prop.title}`}>
+              // Plain anchor on purpose: a full page load works on every browser, including iPhones.
+              <a key={prop.id} href={prop.href} className={cardClass} aria-label={`View ${prop.title}`}>
                 {content}
-              </Link>
+              </a>
             ) : (
               <div key={prop.id} className={cardClass}>
                 {content}

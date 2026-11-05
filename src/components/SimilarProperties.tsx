@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { ArrowUpRight, Bath, Bed, ChevronLeft, ChevronRight, Maximize } from 'lucide-react';
 import PropertyImage from './PropertyImage';
 import type { Property } from '../types/firestore';
@@ -72,7 +71,8 @@ export default function SimilarProperties({ properties }: { properties: Property
       >
         {properties.map((p) => (
           <li key={p.id} className="snap-start shrink-0 w-[82%] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-            <Link
+            {/* Plain anchor on purpose: a full page load works on every browser, including iPhones. */}
+            <a
               href={`/properties/${p.id}`}
               aria-label={`View ${p.title}`}
               className="group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] flex flex-col justify-end p-8 transition-transform duration-500 hover:-translate-y-1"
@@ -117,7 +117,7 @@ export default function SimilarProperties({ properties }: { properties: Property
                   </div>
                 </div>
               </div>
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
