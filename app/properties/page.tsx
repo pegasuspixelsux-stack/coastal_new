@@ -24,7 +24,7 @@ export default async function PropertiesPage({ searchParams }: Props) {
   // Spotlight the priciest listings; the inventory grid above already shows everything.
   const recommended = [...all]
     .sort((a, b) => parsePrice(b.price) - parsePrice(a.price))
-    .slice(0, 8);
+    .slice(0, 5);
 
   return (
     <div className="min-h-screen bg-[#FBFBFD] text-[#1D1D1F] font-sans antialiased">

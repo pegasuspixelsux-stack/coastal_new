@@ -148,7 +148,7 @@ export async function getActiveProperties(maxResults = 60): Promise<Property[]> 
  * Active properties most similar to `base` (same area, type, operation and a close price),
  * best match first. Uses one simple query (no index needed) and ranks the results here.
  */
-export async function getSimilarProperties(base: Property, maxResults = 8): Promise<Property[]> {
+export async function getSimilarProperties(base: Property, maxResults = 5): Promise<Property[]> {
   const snap = await getDocs(
     query(collection(requireDb(), PROPERTIES), where('status', '==', 'active'), limitTo(60))
   );

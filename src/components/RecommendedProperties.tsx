@@ -70,7 +70,7 @@ export default function RecommendedProperties({ properties }: { properties: Home
       >
         {properties.map((p) => {
           const cardClass =
-            'group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] flex flex-col justify-end p-8 transition-transform duration-500 hover:-translate-y-1';
+            'group relative aspect-square rounded-2xl overflow-hidden bg-[#E5E5EA] flex flex-col justify-end p-4 transition-transform duration-500 hover:-translate-y-1';
           const content = (
             <>
               <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
@@ -78,32 +78,32 @@ export default function RecommendedProperties({ properties }: { properties: Home
                   src={p.image}
                   alt={`${p.title}, ${p.location}`}
                   variant="card"
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 82vw"
+                  sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 58vw"
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
-                <span className="bg-white/90 backdrop-blur-md text-black text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm">
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                <span className="bg-white/90 backdrop-blur-md text-black text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
                   {p.price}
                 </span>
-                <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                  <ArrowUpRight className="w-4 h-4" />
+                <span className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </span>
               </div>
               <div className="relative z-10 text-white">
-                <p className="text-xs text-white/70 font-medium tracking-wide uppercase mb-1">{p.location}</p>
-                <h3 className="text-2xl font-semibold tracking-tight mb-4">{p.title}</h3>
-                <div className="flex items-center space-x-6 pt-4 border-t border-white/20 text-xs text-white/80 font-medium">
-                  <div className="flex items-center space-x-1.5">
-                    <Bed className="w-4 h-4" />
+                <p className="text-[10px] text-white/70 font-medium tracking-wide uppercase mb-1">{p.location}</p>
+                <h3 className="text-base font-semibold tracking-tight mb-2 leading-snug">{p.title}</h3>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 border-t border-white/20 text-[10px] text-white/80 font-medium">
+                  <div className="flex items-center space-x-1">
+                    <Bed className="w-3 h-3" />
                     <span>{p.beds} Dorm.</span>
                   </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Bath className="w-4 h-4" />
+                  <div className="flex items-center space-x-1">
+                    <Bath className="w-3 h-3" />
                     <span>{p.baths} Baños</span>
                   </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Maximize className="w-4 h-4" />
+                  <div className="flex items-center space-x-1">
+                    <Maximize className="w-3 h-3" />
                     <span>{p.area}</span>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ export default function RecommendedProperties({ properties }: { properties: Home
             </>
           );
           return (
-            <li key={p.id} className="snap-start shrink-0 w-[82%] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+            <li key={p.id} className="snap-start shrink-0 w-[58%] sm:w-[calc(33.333%-16px)] lg:w-[calc(20%-19.2px)]">
               {p.href ? (
                 // Plain anchor on purpose: a full page load works on every browser, including iPhones.
                 <a href={p.href} aria-label={`Ver ${p.title}`} className={cardClass}>
