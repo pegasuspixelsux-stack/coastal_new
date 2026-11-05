@@ -359,6 +359,25 @@ export default function CoastalWebHome({
         </div>
       </header>
 
+      {/* --- ZONES STRIP (transparent, horizontally scrolling) --- */}
+      <div className="fixed top-16 left-0 right-0 z-40">
+        <div className="max-w-7xl mx-auto px-6 flex gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {zones.map((zone) => (
+            <button
+              key={zone.name}
+              type="button"
+              onClick={() => {
+                setQuery(zone.search);
+                document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="shrink-0 whitespace-nowrap text-xs font-medium text-white bg-black/20 hover:bg-white hover:text-black backdrop-blur-md border border-white/30 px-4 py-1.5 rounded-full transition-colors"
+            >
+              {zone.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* --- HERO SLIDESHOW (5-slide full-width) --- */}
       <section className="relative w-full h-[90vh] md:h-auto md:aspect-square lg:aspect-auto lg:h-screen overflow-hidden">
         {slides.map((slide, index) => (
