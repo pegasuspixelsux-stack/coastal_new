@@ -399,7 +399,7 @@ export default function CoastalWebHome({
             </div>
 
             {/* Content Container */}
-            <div className="relative max-w-7xl mx-auto h-full px-6 flex flex-col justify-end md:flex-row md:items-end gap-8 pb-20 md:pb-28 text-white">
+            <div className="relative max-w-7xl mx-auto h-full px-6 flex flex-col justify-end md:flex-row md:items-end gap-8 pb-8 md:pb-28 items-start text-left text-white">
               <div className="max-w-2xl md:mr-auto transform transition-all duration-700 translate-y-0">
                 <div className="flex items-center space-x-2 text-white/80 text-sm font-medium tracking-wide mb-3 uppercase">
                   <MapPin className="w-4 h-4" />
