@@ -94,18 +94,32 @@ export default function ImageUpload({
         const file = await compressImageToWebP(original); // WebP, under 1 MB
 
         setStatus(`${prefix}Uploading…`);
-        const { token, expire, signature, publicKey } = await getAuthParams();
-        const result = await upload({
-          file,
-          fileName: file.name,
-          folder,
-          useUniqueFileName: true,
-          token,
-          expire,
-          signature,
-          publicKey,
-          onProgress: (e) => setProgress(Math.round((e.loaded / e.total) * 100)),
-        });
+        // ImageKit sometimes answers with a temporary 5xx (or the connection drops). Retry a couple of
+        // times; each attempt needs fresh credentials because upload tokens are single-use.
+        let result: Awaited<ReturnType<typeof upload>> | undefined;
+        for (let attempt = 1; ; attempt++) {
+          const { token, expire, signature, publicKey } = await getAuthParams();
+          try {
+            result = await upload({
+              file,
+              fileName: file.name,
+              folder,
+              useUniqueFileName: true,
+              token,
+              expire,
+              signature,
+              publicKey,
+              onProgress: (e) => setProgress(Math.round((e.loaded / e.total) * 100)),
+            });
+            break;
+          } catch (err) {
+            const temporary = err instanceof ImageKitServerError || err instanceof ImageKitUploadNetworkError;
+            if (!temporary || attempt >= 3) throw err;
+            setProgress(0);
+            setStatus(`${prefix}Retrying (${attempt + 1}/3)…`);
+            await new Promise((resolve) => setTimeout(resolve, attempt * 1500));
+          }
+        }
         if (!result.url || !result.fileId) throw new Error('ImageKit returned no URL.');
         onUploaded({ url: result.url, fileId: result.fileId });
       }
